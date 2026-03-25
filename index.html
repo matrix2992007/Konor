@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>عيد ميلاد سعيد ❤️</title>
+<style>
+body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* نص الترحيب */
+#welcomeText {
+    font-size: 32px;
+    margin-top: 150px;
+    opacity: 0;
+    transform: scale(0) translateY(100px);
+    transition: all 1s ease;
+}
+
+/* سؤال الحب */
+#loveQuestion {
+    font-size: 28px;
+    margin-top: 50px;
+    display: none;
+}
+
+/* أزرار السؤال */
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+#yesBtn { background: #ff4d6d; color: white; }
+#noBtn { background: gray; color: white; }
+
+/* صندوق الباسورد */
+#passwordBox {
+    margin-top: 30px;
+    display: none;
+}
+input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+/* نصوص بعد الباسورد */
+#text1, #text2 {
+    font-size: 24px;
+    opacity: 0;
+    transition: all 1s ease;
+}
+
+/* العداد القديم */
+#counterContainer {
+    margin-top: 20px;
+    display: none;
+    background-color: white;
+    color: black;
+    padding: 20px 30px;
+    border-radius: 12px;
+    display: inline-block;
+    text-align: center;
+}
+
+#counter {
+    font-size: 16px;
+    color: #ff4d6d;
+    letter-spacing: 1px;
+}
+#counter span {
+    display: inline-block;
+    min-width: 60px;
+}
+
+/* عداد 3 ثواني */
+#countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    font-size: 100px;
+    color: #ff4d6d;
+    display: none;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+/* نص التهنئة النهائي */
+#birthdayMessage {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    color: #ff4d6d;
+    text-align: center;
+}
+
+/* التاريخ أعلى الشاشة */
+#birthdayDate {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    color: white;
+}
+
+/* نجوم وقلوب الطفو */
+.star { position: absolute; width: 2px; height: 2px; background: white; animation: blink 2s infinite; }
+@keyframes blink { 0%,100% {opacity:0.2;} 50%{opacity:1;} }
+
+.heart { position: absolute; color: red; animation: float 5s linear infinite; }
+@keyframes float { 0% {transform: translateY(100vh);} 100% {transform: translateY(-10vh);} }
+
+</style>
+</head>
+<body>
+
+<!-- نص الترحيب -->
+<div id="welcomeText">♥️😍نورتي يا حبيبت قلبي️</div>
+
+<!-- سؤال الحب -->
+<div id="loveQuestion">
+  بتحبيني ولا لا؟ <br>
+    <button id="yesBtn">اه</button>
+    <button id="noBtn">لا</button>
+</div>
+
+<!-- حقل الباسورد -->
+<div id="passwordBox">
+    <input type="password" id="pass" placeholder="ادخلي كلمة السر">
+    <button onclick="checkPass()">دخول ❤️</button>
+</div>
+
+<!-- نصوص بعد الباسورد -->
+<div id="text1">️ده عداد شغال من اول ما حبك اتزرع في قلبي  ♥
+وانشاءالله مش هيقف طول منا عايش ومموتش  ♥ <br>
+ومش هيبطل طول ما أنا مموتش<br>
+وانشاء الله نفضل مع بعض ونحقق كل اللي بتمناه مع بعض ♥️😍🫶🏻
+</div>
+<div id="text2">
+يعني شوفي قعد تلت سنين بحبك من طرف واحد 🙂♥️<br>
+وحضرتك بتقوليلي انت داخل بتلعب بيا 💔🙂😂
+</div>
+
+<!-- العداد القديم -->
+<div id="counterContainer">
+    <div id="counter">
+        <span id="years"></span> | 
+        <span id="months"></span> | 
+        <span id="days"></span> | 
+        <span id="hours"></span> | 
+        <span id="minutes"></span> | 
+        <span id="seconds"></span>
+    </div>
+</div>
+
+<!-- عداد 3 ثواني -->
+<div id="countdown"></div>
+
+<!-- النص النهائي في نص الشاشة -->
+<div id="birthdayMessage">
+كل سنة وانتي طيبة وعيد ميلاد سعيد عليكي ي عمري ♥️
+ودايمااا بتمنالك الخير عشان انتي تستاهلي كل خير وربنا يخليكي ليا ي نور عيني♥ 
+</div>
+
+<!-- التاريخ أعلى الشاشة -->
+<div id="birthdayDate">28/3/2009</div>
+
+<script>
+// نجوم وقلوب الطفو
+function createStars() {
+    for(let i=0;i<60;i++){
+        let star=document.createElement("div");
+        star.className="star";
+        star.style.left=Math.random()*100+"vw";
+        star.style.top=Math.random()*100+"vh";
+        document.body.appendChild(star);
+    }
+}
+createStars();
+
+function createHeart(){
+    let heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),5000);
+}
+setInterval(createHeart,400);
+
+// عناصر الصفحة
+const welcome = document.getElementById("welcomeText");
+const loveQ = document.getElementById("loveQuestion");
+const passwordBox = document.getElementById("passwordBox");
+const text1 = document.getElementById("text1");
+const text2 = document.getElementById("text2");
+const counterContainer = document.getElementById("counterContainer");
+const countdown = document.getElementById("countdown");
+const birthdayMessage = document.getElementById("birthdayMessage");
+const birthdayDate = document.getElementById("birthdayDate");
+
+// الترحيب
+setTimeout(()=>{
+    welcome.style.opacity = 1;
+    welcome.style.transform = "scale(1) translateY(0)";
+}, 100);
+
+setTimeout(()=>{
+    welcome.style.opacity = 0;
+    welcome.style.transform = "scale(0) translateY(-100px)";
+    setTimeout(()=>{ loveQ.style.display="block"; }, 500);
+},2100);
+
+// أزرار سؤال الحب
+document.getElementById("noBtn").addEventListener("click",()=>{
+    alert("ليه؟ 🙂💔"); 
+});
+document.getElementById("yesBtn").addEventListener("click",()=>{
+    loveQ.style.display="none";
+    passwordBox.style.display="block";
+});
+
+// الباسورد
+function checkPass(){
+    let password=document.getElementById("pass").value;
+    if(password==="love"){
+        passwordBox.style.display="none";
+
+        // النص الأول بعد الباسورد
+        text1.style.opacity = 1;
+
+        setTimeout(()=>{
+            text1.style.opacity = 0;
+
+            setTimeout(()=>{
+                // النص الثاني بعد النص الأول
+                text2.style.opacity = 1;
+
+                setTimeout(()=>{
+                    text2.style.opacity = 0;
+                    counterContainer.style.display = "none"; // شيل العداد القديم
+
+                    // بدء العد التنازلي 3 ثواني
+                    startCountdown();
+                },7000);
+
+            },500);
+
+        },7000);
+
+        // اظهار العداد القديم مؤقتاً أثناء النصوص
+        counterContainer.style.display = "inline-block";
+        startCounter(); // يبدأ العداد القديم
+
+    }else{
+        alert("غلط 😢");
+    }
+}
+
+// العداد القديم من 20/9/2022 بالإنجليزي
+function startCounter(){
+    const startDate = new Date("2022-09-20T00:00:00");
+    setInterval(()=>{
+        const now = new Date();
+        let diff = Math.floor((now - startDate)/1000);
+
+        const years = Math.floor(diff / (365*24*60*60));
+        diff -= years*365*24*60*60;
+        const months = Math.floor(diff / (30*24*60*60));
+        diff -= months*30*24*60*60;
+        const days = Math.floor(diff / (24*60*60));
+        diff -= days*24*60*60;
+        const hours = Math.floor(diff / 3600);
+        diff -= hours*3600;
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+
+        document.getElementById("years").innerText = `${years} Y`;
+        document.getElementById("months").innerText = `${months} M`;
+        document.getElementById("days").innerText = `${days} D`;
+        document.getElementById("hours").innerText = `${hours} H`;
+        document.getElementById("minutes").innerText = `${minutes} Min`;
+        document.getElementById("seconds").innerText = `${seconds} Sec`;
+    },1000);
+}
+
+// عداد 3 ثواني
+function startCountdown(){
+    let nums = [3,2,1];
+    countdown.style.display = "block";
+    let i = 0;
+
+    function showNumber(){
+        if(i < nums.length){
+            countdown.innerText = nums[i];
+            countdown.style.opacity = 1;
+            countdown.style.transform = "translate(-50%, -50%) scale(2)";
+            setTimeout(()=>{
+                countdown.style.opacity = 0;
+                countdown.style.transform = "translate(-50%, -50%) scale(0)";
+                i++;
+                setTimeout(showNumber,300);
+            },700);
+        }else{
+            countdown.style.display = "none";
+            showBirthdayMessage();
+        }
+    }
+    showNumber();
+}
+
+// نص التهنئة النهائي في نص الشاشة + التاريخ أعلى الشاشة
+function showBirthdayMessage(){
+    birthdayDate.style.display = "block";
+    birthdayMessage.style.display = "block";
+}
+</script>
+</body>
+</html>
